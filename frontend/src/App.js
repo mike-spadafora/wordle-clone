@@ -14,6 +14,9 @@ function App() {
   const WORD_SIZE = 5;
 
   useEffect(() => {
+    /**
+     * create a WORD_SIZE by NUM_GUESSES sized grid
+     */
     function initializeWordGrid() {
       let newWordGrid = [];
       //create the rows (from guesses)
@@ -31,17 +34,28 @@ function App() {
       setWordGrid(newWordGrid);
     }
 
+    /**
+     * chooses the solution word
+     */
     function pickWord() {
       setSolution("hello");
     }
 
+    /**
+     * start the game. initialize grid and pick the solution word.
+     */
     if (wordGrid.length === 0) {
       initializeWordGrid();
       pickWord();
-      console.log("hi");
     }
   });
 
+  /**
+   * this is called whenever a user types in one of the boxes
+   * @param {*} e the change event
+   * @param {int} row the current row (or word within the grid)
+   * @param {int} column the current column (letter within the word)
+   */
   const handlechange = (e, row, column) => {
     const newWordGrid = [...wordGrid];
     newWordGrid[row][column].letter = e.target.value;
@@ -49,6 +63,12 @@ function App() {
     setFocusToNextCol(row, column);
   };
 
+  /**
+   * This is called whenever a user types a single letter, in order to
+   * shift the focus to the next box to the right
+   * @param {*} row the current row
+   * @param {*} col the current col
+   */
   const setFocusToNextCol = (row, col) => {
     if (col !== 4) {
       let getId = row + ":" + (col + 1);
@@ -57,6 +77,10 @@ function App() {
     }
   };
 
+  /**
+   * this is called when a guess is successfully submitted
+   * @param {*} row the current row
+   */
   const setFocusToNextRow = (row) => {
     if (row !== 5) {
       let getId = row + 1 + ":" + 0;
@@ -65,6 +89,11 @@ function App() {
     }
   };
 
+  /**
+   * validates the guess has 5 letters
+   * @param {Array[ {char, SlotState }]} guess The guess that was submitted
+   * @returns true if guess is valid, false if not
+   */
   const isValidGuess = (guess) => {
     for (let i = 0; i < 5; i++) {
       if (guess[i].letter === "") {
@@ -74,6 +103,11 @@ function App() {
     return true;
   };
 
+  /**
+   * handles submit logic:
+   * checks if guess is valid, then checks letter by letter of guess.
+   * finally, checks if game is over, and moves cursor to next row if not
+   */
   const handleSubmit = () => {
     const newWordGrid = [...wordGrid];
     const currentGuess = newWordGrid[currentRow];
@@ -104,12 +138,10 @@ function App() {
     }
   };
 
-  const onKeyPressHandler = (e) => {
-    if (e.key === "Enter") {
-      handleSubmit();
-    }
-  };
-
+  /**
+   * submits if enter is pressed
+   * @param {*} event the keypress event
+   */
   const enterPressed = (event) => {
     var code = event.keyCode || event.which;
     if (code === 13) {
@@ -142,6 +174,9 @@ function App() {
   );
 }
 
+/**
+ * stores a set of rows
+ */
 const Div = styled.div`
   display: flex;
   justify-content: center;
@@ -155,6 +190,9 @@ const RowWrapper = styled.div`
   gap: 8px;
 `;
 
+/**
+ * individual box for letters, which changes color based on game state
+ */
 const LetterBox = styled.input`
   font-size: 56px;
   background-color: ${(props) => {
