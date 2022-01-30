@@ -1,7 +1,7 @@
 //states: "correct", "wrongposition", "incorrect", "empty"
 export enum SlotState {
-    correct,
-    wrongPosition,
-    incorrect,
-    empty
+  CORRECT,
+  WRONG_POSITION,
+  INCORRECT,
+  EMPTY,
 }
