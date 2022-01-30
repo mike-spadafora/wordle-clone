@@ -90,6 +90,7 @@ function App() {
               onChange={(e) => handlechange(e, rowIndex, colIndex)}
               value={wordGrid[rowIndex][colIndex].letter}
               maxLength={1}
+              readOnly={currentRow !== rowIndex}
             />
           ))}
         </RowWrapper>
@@ -119,6 +120,8 @@ const LetterBox = styled.input`
       return "green";
     } else if (props.status === SlotState.WRONG_POSITION) {
       return "yellow";
+    } else if (props.status === SlotState.INCORRECT) {
+      return "grey";
     } else {
       return "#d3d3d3";
     }
