@@ -8,10 +8,10 @@ function App() {
   const [wordGrid, setWordGrid] = useState([]);
   const [currentRow, setCurrentRow] = useState(0);
   const [isGameOver, setisGameOver] = useState(false);
+  const [solution, setSolution] = useState("");
 
   const NUM_GUESSES = 6;
   const WORD_SIZE = 5;
-  const solution = "where";
 
   useEffect(() => {
     function initializeWordGrid() {
@@ -30,8 +30,15 @@ function App() {
 
       setWordGrid(newWordGrid);
     }
+
+    function pickWord() {
+      setSolution("hello");
+    }
+
     if (wordGrid.length === 0) {
       initializeWordGrid();
+      pickWord();
+      console.log("hi");
     }
   });
 
@@ -39,10 +46,10 @@ function App() {
     const newWordGrid = [...wordGrid];
     newWordGrid[row][column].letter = e.target.value;
     setWordGrid(newWordGrid);
-    setFocusToNext(row, column);
+    setFocusToNextCol(row, column);
   };
 
-  const setFocusToNext = (row, col) => {
+  const setFocusToNextCol = (row, col) => {
     if (col !== 4) {
       let getId = row + ":" + (col + 1);
       let cell = document.getElementById(getId);
@@ -50,11 +57,28 @@ function App() {
     }
   };
 
+  const setFocusToNextRow = (row) => {
+    if (row !== 5) {
+      let getId = row + 1 + ":" + 0;
+      let cell = document.getElementById(getId);
+      cell.focus();
+    }
+  };
+
+  const isValidGuess = (guess) => {
+    for (let i = 0; i < 5; i++) {
+      if (guess[i].letter === "") {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
     const newWordGrid = [...wordGrid];
     const currentGuess = newWordGrid[currentRow];
 
-    if (currentGuess[0].letter !== "") {
+    if (isValidGuess(currentGuess)) {
       for (let i = 0; i < currentGuess.length; i++) {
         const currentGuessSlot = currentGuess[i];
         const currentGuessLetter = currentGuessSlot.letter;
@@ -72,10 +96,25 @@ function App() {
       for (let i = 0; i < currentGuess.length; i++) {
         if (currentGuess[i].state !== SlotState.CORRECT) {
           isCorrect = false;
+          setFocusToNextRow(currentRow);
           setCurrentRow(currentRow + 1);
         }
       }
       setisGameOver(isCorrect);
+    }
+  };
+
+  const onKeyPressHandler = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
+  const enterPressed = (event) => {
+    var code = event.keyCode || event.which;
+    if (code === 13) {
+      //13 is the enter keycode
+      handleSubmit();
     }
   };
 
@@ -91,11 +130,14 @@ function App() {
               value={wordGrid[rowIndex][colIndex].letter}
               maxLength={1}
               readOnly={currentRow !== rowIndex}
+              onKeyPress={enterPressed}
             />
           ))}
         </RowWrapper>
       ))}
-      <SubmitButton onClick={handleSubmit}> Submit </SubmitButton>
+      <SubmitButton onClick={handleSubmit} onKeyPress={enterPressed}>
+        Submit
+      </SubmitButton>
     </Div>
   );
 }
