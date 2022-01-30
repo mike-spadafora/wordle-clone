@@ -35,7 +35,7 @@ function App() {
     }
 
     /**
-     * chooses the solution word
+     * chooses the solution word. This should be altered to call the django server.
      */
     function pickWord() {
       setSolution("hello");
