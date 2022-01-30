@@ -39,6 +39,15 @@ function App() {
     const newWordGrid = [...wordGrid];
     newWordGrid[row][column].letter = e.target.value;
     setWordGrid(newWordGrid);
+    setFocusToNext(row, column);
+  };
+
+  const setFocusToNext = (row, col) => {
+    if (col !== 4) {
+      let getId = row + ":" + (col + 1);
+      let cell = document.getElementById(getId);
+      cell.focus();
+    }
   };
 
   const handleSubmit = () => {
@@ -76,6 +85,7 @@ function App() {
         <RowWrapper key={rowIndex}>
           {row.map((col, colIndex) => (
             <LetterBox
+              id={rowIndex + ":" + colIndex}
               status={col.state}
               onChange={(e) => handlechange(e, rowIndex, colIndex)}
               value={wordGrid[rowIndex][colIndex].letter}
