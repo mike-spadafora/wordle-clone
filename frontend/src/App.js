@@ -20,7 +20,7 @@ function App() {
       //initialize empty spots
       for (let i = 0; i < NUM_GUESSES; i++) {
         for (let j = 0; j < WORD_SIZE; j++) {
-          newWordGrid[i].push({ letter: "a", state: SlotState.empty });
+          newWordGrid[i].push({ letter: "", state: SlotState.empty });
         }
       }
 
@@ -31,12 +31,23 @@ function App() {
     }
   });
 
+  const handlechange = (e, row, column) => {
+    const newWordGrid = [...wordGrid];
+    newWordGrid[row][column] = e.target.value;
+
+    setWordGrid(newWordGrid);
+  };
+
   return (
     <Div>
-      {wordGrid.map((row) => (
-        <RowWrapper>
-          {row.map((col) => (
-            <div> {col.letter}</div>
+      {wordGrid.map((row, rowIndex) => (
+        <RowWrapper key={rowIndex}>
+          {row.map((col, colIndex) => (
+            <LetterBox
+              onChange={(e) => handlechange(e, rowIndex, colIndex)}
+              value={wordGrid[rowIndex][colIndex].letter}
+              maxLength={1}
+            />
           ))}
         </RowWrapper>
       ))}
@@ -55,6 +66,16 @@ const Div = styled.div`
 const RowWrapper = styled.div`
   display: flex;
   gap: 8px;
+`;
+
+const LetterBox = styled.input`
+  font-size: 56px;
+  background-color: #d3d3d3;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  type: text
+  maxLength: 1;
 `;
 
 export default App;
