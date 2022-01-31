@@ -8,6 +8,7 @@ import random
 
 @api_view(['GET'])
 def get_guessable_word(request):
+    #TODO: make sure word is consistent across calls in a single day
     if request.method == 'GET':
         word = get_random_word_from_file()
         return Response(word)
@@ -20,6 +21,7 @@ def get_random_word_from_file():
 
 @api_view(['POST'])
 def validate_word(request):
+    #todo keep this object persistent
     gv = guess_validator()
     
     if request.method == 'POST':
