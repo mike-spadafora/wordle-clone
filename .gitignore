@@ -2,3 +2,4 @@
 /frontend/node_modules
 /wordle_site/wordle_site/__pycache__/
 /wordle_site/wordle_dict/__pycache__/
+.vscode/launch.json
