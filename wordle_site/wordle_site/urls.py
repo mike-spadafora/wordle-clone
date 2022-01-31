@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from wordle_dict.views import post_collection
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+        # api
+    path('word/', post_collection),
 ]
