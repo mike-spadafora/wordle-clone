@@ -1,18 +1,27 @@
-from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import wordle_dict
-from .serializers import WordleDictSerializer
-from rest_framework import viewsets
+from .helpers.guess_validator import guess_validator
+import random
 
 # Create your views here.
 
-class WordleDictView(viewsets.ModelViewSet):
-    serializer_class = WordleDictSerializer
-    queryset = wordle_dict.objects.all()
-    
 @api_view(['GET'])
-def post_collection(request):
+def get_guessable_word(request):
     if request.method == 'GET':
-        return Response("hello")
+        word = get_random_word_from_file()
+        return Response(word)
+    
+def get_random_word_from_file():
+    lines = open('words.txt').read().splitlines()
+    myline =random.choice(lines)
+    return(myline)
+
+
+@api_view(['POST'])
+def validate_word(request):
+    gv = guess_validator()
+    
+    if request.method == 'POST':
+        word = gv.validate(request.POST.get('word'))
+        return Response(word)
