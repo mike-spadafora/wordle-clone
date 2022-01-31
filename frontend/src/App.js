@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import styled from "styled-components";
 import "./App.css";
+import axios from "axios";
 import { SlotState } from "./SlotState.ts";
 
 function App() {
@@ -38,7 +39,10 @@ function App() {
      * chooses the solution word. This should be altered to call the django server.
      */
     function pickWord() {
-      setSolution("hello");
+      axios
+        .get("http://localhost:8000/newWord")
+        .then((res) => setSolution(res))
+        .catch((err) => console.log(err));
     }
 
     /**
