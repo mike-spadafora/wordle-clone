@@ -42,9 +42,8 @@ function App() {
       axios
         .get("http://localhost:8000/word")
         .then((res) => {
-          console.log("res" + res);
           setSolution(res.data.toString());
-          console.log("solution:" + solution);
+          console.log("solution:" + res.data.toString());
         })
         .catch((err) => console.log(err));
     }
@@ -108,6 +107,14 @@ function App() {
         return false;
       }
     }
+
+    axios
+      .post("http://localhost:8000/validate/", { word: "sword" })
+      .then((res) => {
+        console.log("solution:" + res.data());
+      })
+      .catch((err) => console.log(err));
+
     return true;
   };
 
