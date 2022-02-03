@@ -40,8 +40,12 @@ function App() {
      */
     function pickWord() {
       axios
-        .get("http://localhost:8000/newWord")
-        .then((res) => setSolution(res))
+        .get("http://localhost:8000/word")
+        .then((res) => {
+          console.log("res" + res);
+          setSolution(res.data.toString());
+          console.log("solution:" + solution);
+        })
         .catch((err) => console.log(err));
     }
 
