@@ -101,9 +101,10 @@ function App() {
    * @param {Array[ {char, SlotState }]} guess The guess that was submitted
    * @returns true if guess is valid, false if not
    */
-  const isValidGuess = (guess) => {
+  const isValidGuess = async (guess) => {
     let guessString = "";
 
+    //validate exactly 5 letters
     for (let i = 0; i < 5; i++) {
       if (guess[i].letter === "") {
         return false;
@@ -111,6 +112,10 @@ function App() {
       guessString += guess[i].letter;
     }
 
+    return await djangoValidate(guessString);
+  };
+
+  const djangoValidate = async (guessString) => {
     const params = new URLSearchParams();
     params.append("word", guessString);
 
@@ -120,14 +125,13 @@ function App() {
       },
     };
 
-    axios
-      .post("http://localhost:8000/validate/", params, config)
-      .then((res) => {
-        console.log("valid:" + res.data);
-      })
-      .catch((err) => console.log(err));
+    const res = await axios.post(
+      "http://localhost:8000/validate/",
+      params,
+      config
+    );
 
-    return true;
+    return res.data;
   };
 
   /**
@@ -135,11 +139,11 @@ function App() {
    * checks if guess is valid, then checks letter by letter of guess.
    * finally, checks if game is over, and moves cursor to next row if not
    */
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newWordGrid = [...wordGrid];
     const currentGuess = newWordGrid[currentRow];
 
-    if (isValidGuess(currentGuess)) {
+    if (await isValidGuess(currentGuess)) {
       for (let i = 0; i < currentGuess.length; i++) {
         const currentGuessSlot = currentGuess[i];
         const currentGuessLetter = currentGuessSlot.letter;
