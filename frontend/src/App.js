@@ -102,16 +102,28 @@ function App() {
    * @returns true if guess is valid, false if not
    */
   const isValidGuess = (guess) => {
+    let guessString = "";
+
     for (let i = 0; i < 5; i++) {
       if (guess[i].letter === "") {
         return false;
       }
+      guessString += guess[i].letter;
     }
 
+    const params = new URLSearchParams();
+    params.append("word", guessString);
+
+    const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+
     axios
-      .post("http://localhost:8000/validate/", { word: "sword" })
+      .post("http://localhost:8000/validate/", params, config)
       .then((res) => {
-        console.log("solution:" + res.data());
+        console.log("valid:" + res.data);
       })
       .catch((err) => console.log(err));
 

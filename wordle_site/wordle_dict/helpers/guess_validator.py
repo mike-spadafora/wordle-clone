@@ -9,4 +9,5 @@ class guess_validator():
         self.filtered_list = {x for x in wn_lemmas if len(x) == 5} # all 5 letter english words in wordnet
         
     def validate(self, word):
+        print("validating " + word)
         return (word in self.filtered_list)
